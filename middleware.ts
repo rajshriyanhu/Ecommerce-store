@@ -4,7 +4,7 @@ import { authMiddleware } from "@clerk/nextjs";
 // Please edit this to allow other routes to be public as needed.
 // See https://clerk.com/docs/nextjs/middleware for more information about configuring your middleware
 export default authMiddleware({
-  publicRoutes: ['/',/\/products\/[a-zA-Z0-9-]+/,/\/category\/[a-zA-Z0-9-]+/],
+  publicRoutes: ['https://ecommerce-store-three-henna.vercel.app/',/\/products\/[a-zA-Z0-9-]+/,/\/category\/[a-zA-Z0-9-]+/],
   ignoredRoutes: ["/studio/desk/product"]
 });
 
