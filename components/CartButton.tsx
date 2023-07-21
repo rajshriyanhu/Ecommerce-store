@@ -11,7 +11,9 @@ interface CartButtonProps {
 }
 
 const CartButton: React.FC<CartButtonProps> = ({ productId , cartIds }) => {
-    const {userId} = useAuth()
+    const action = "add";
+    const { ispresentInCart, addToCart } = useCart({ productId, cartIds, action });
+    const {userId} = useAuth();
     if(!userId){
         return (
             <div
@@ -20,8 +22,7 @@ const CartButton: React.FC<CartButtonProps> = ({ productId , cartIds }) => {
             </div>
         )
     }
-    const action = "add";
-    const { ispresentInCart, addToCart } = useCart({ productId, cartIds, action });
+    
 
     return (
         <div
