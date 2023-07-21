@@ -14,7 +14,7 @@ const useWishlist = ({ productId, wishlistIds }: wishlistParams) => {
   const router = useRouter();
   
   let isWishlisted:boolean;
-    if(userId)isWishlisted = wishlistIds.includes(productId)
+    if(userId)isWishlisted = wishlistIds?.includes(productId)
     else isWishlisted = false;
 
   const toggleFavorite = useCallback(

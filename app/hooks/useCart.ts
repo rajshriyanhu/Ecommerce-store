@@ -14,7 +14,7 @@ const useCart = ({ productId, cartIds, action }: cartParams) => {
     const { userId } = useAuth();
     const router = useRouter();
     let ispresentInCart:boolean;
-    if(userId)ispresentInCart = cartIds.includes(productId);
+    if(userId)ispresentInCart = cartIds?.includes(productId);
     else ispresentInCart = false;
 
     const addToCart = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
