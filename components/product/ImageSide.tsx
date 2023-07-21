@@ -15,7 +15,7 @@ const ImageSide: React.FC<ImageType> = ({ images }) => {
 
     return (
         <>
-            <div className="w-full h-min-[68vh]  rounded-xl overflow-hidden">
+            <div className="w-full h-[68vh] rounded-xl overflow-hidden">
                 <img src={currImage} alt="image" style={{ height: '100%', width: '100%', objectFit: 'cover' }} />
             </div>
             <div className="w-full mt-4 flex">{
