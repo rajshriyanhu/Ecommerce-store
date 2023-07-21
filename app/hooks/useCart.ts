@@ -12,9 +12,10 @@ interface cartParams {
 
 const useCart = ({ productId, cartIds, action }: cartParams) => {
     const { userId } = useAuth();
-
     const router = useRouter();
-    const ispresentInCart = cartIds.includes(productId);
+    let ispresentInCart:boolean;
+    if(userId)ispresentInCart = cartIds.includes(productId);
+    else ispresentInCart = false;
 
     const addToCart = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();

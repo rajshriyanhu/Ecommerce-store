@@ -15,7 +15,7 @@ const Navbar = () => {
     if(path.startsWith('/studio')){
         return null;
     }
-    var isUserLoggedIn = false;
+    let isUserLoggedIn = false;
     if (userId) isUserLoggedIn = true;
     
     const handleWishlist = () => {

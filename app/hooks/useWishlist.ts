@@ -10,9 +10,12 @@ interface wishlistParams {
 }
 
 const useWishlist = ({ productId, wishlistIds }: wishlistParams) => {
+  const {userId} = useAuth()
   const router = useRouter();
   
-  const isWishlisted = wishlistIds.includes(productId)
+  let isWishlisted:boolean;
+    if(userId)isWishlisted = wishlistIds.includes(productId)
+    else isWishlisted = false;
 
   const toggleFavorite = useCallback(
     async (e: React.MouseEvent<HTMLDivElement>) => {

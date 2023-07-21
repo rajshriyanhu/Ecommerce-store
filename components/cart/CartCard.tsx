@@ -18,36 +18,43 @@ interface CartCardProps {
 }
 
 const CartCard: React.FC<CartCardProps> = ({ name, id, src, currency, price, slug, cartIds }) => {
-    const action ="remove";
+    const action = "remove";
     const productId = id;
     const { ispresentInCart, removeFromCart } = useCart({ productId, cartIds, action });
 
 
-    const [quantity, setQuantity] = useState<number>(cartState[id] || 0);
+    const [quantity, setQuantity] = useState<number>(cartState[id] !== undefined ? cartState[id] : 1);
 
     useEffect(() => {
         const unsubscribe = subscribeToCartChanges(() => {
-            setQuantity(cartState[id] || 1);
+            setQuantity(cartState[id] !== undefined ? cartState[id] : 1);
         });
-        const products = [{ _id: id, price }];
-        const updatedTotalPrice = getTotalPrice(products);
-        console.log(updatedTotalPrice)
+
         return () => {
             unsubscribe();
         };
     }, [id]);
 
     const handleIncreaseQuantity = (_id: string) => {
-        updateQuantity(_id, cartState[_id] + 1);
-    }
-    const handleDecreaseQuantity = (_id: string) => {
-        if (cartState[_id] == 1) {
-            updateQuantity(_id, cartState[_id]);
+        // Check if the product is already in the cart before increasing its quantity
+        if (cartState[_id] !== undefined) {
+            updateQuantity(_id, cartState[_id] + 1);
+        } else {
+            // If the product is not in the cart, add it with a quantity of 1
+            updateQuantity(_id, 2);
         }
-        else updateQuantity(_id, cartState[_id] - 1);
-    }
+    };
 
-    
+    const handleDecreaseQuantity = (_id: string) => {
+        if (cartState[_id] === 1) {
+            updateQuantity(_id, cartState[_id]);
+        } else {
+            updateQuantity(_id, cartState[_id] - 1);
+        }
+    };
+
+
+
     return (
         <div className='w-[94%] md:w-[90%] lg:w-[90%] xl:w-[90%] 2xl:w-[90%] mx-auto my-2 md:mx-8 md:my-8 lg:mx-8 lg:my-8 xl:mx-8 xl:my-8 2xl:mx-8 2xl:my-8 h-[180px] flex gap-3 items-center shadow-xl rounded-md relative border'>
             <div className='w-[150px] h-[150px] m-2'>
