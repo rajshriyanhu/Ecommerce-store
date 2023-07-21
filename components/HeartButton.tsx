@@ -11,6 +11,7 @@ interface HeartButtonProps {
 }
 
 const HeartButton: React.FC<HeartButtonProps> = ({ productId,wishlistIds }) => {
+    const { isWishlisted, toggleFavorite } = useWishlist({ productId, wishlistIds });
     const {userId} = useAuth();
     if(!userId){
         return (
@@ -21,8 +22,7 @@ const HeartButton: React.FC<HeartButtonProps> = ({ productId,wishlistIds }) => {
             </div>
         )
     }
-    const { isWishlisted, toggleFavorite } = useWishlist({ productId, wishlistIds });
-
+    
     return (
         <div
             onClick={toggleFavorite}
