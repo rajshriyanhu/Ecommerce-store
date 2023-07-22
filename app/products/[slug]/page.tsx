@@ -1,3 +1,5 @@
+import getCartIds from "@/app/actions/getCartIds";
+import getproductId from "@/app/actions/getproductId";
 import EmptyState from "@/components/EmptyState";
 import ButtonsSide from "@/components/product/ButtonsSide";
 import ImageSide from "@/components/product/ImageSide";
@@ -12,9 +14,11 @@ interface Props {
 }
 
 const productDetailsPage = async ({ params }: Props) => {
-  // console.log(params.slug)
+
   const product = await client.fetch<SanityProduct>(groq`*[_type == "product" && slug.current == "${params.slug}"][0]`)
-  // console.log(product)
+  const wishlistIds = await getproductId();
+  const cartIds = await getCartIds()
+
   if (!product) {
     return <div>
       <EmptyState title="Product not found" subtitle="Looks like the product you are finding is not available now" />
@@ -24,7 +28,7 @@ const productDetailsPage = async ({ params }: Props) => {
   return (
     <div className="flex flex-col md:flex-row lg:flex-row xl:flex-row w-full">
       <div className="sm:w-full py-4 mx-2 md:w-1/2 lg:w-1/2 xl:w-1/2 md:py-4 md:mx-4 lg:py-8 lg:mx-8 xl:py-8 xl:mx-8">
-        <ImageSide images={product?.images} />
+        <ImageSide images={product?.images}  productId={product._id} wishlistIds={wishlistIds}  />
       </div>
 
       <div className="sm:w-full py-4 mx-2 md:w-1/2 lg:w-1/2 xl:w-1/2 md:py-4 md:mx-4 lg:py-8 lg:mx-8 xl:py-8 xl:mx-8">
@@ -46,7 +50,7 @@ const productDetailsPage = async ({ params }: Props) => {
           <div key={item} className="capitalize mr-2">{item}</div>
         ))}</div>
         <div></div>
-        <ButtonsSide />
+        <ButtonsSide productId={product._id} cartIds={cartIds} />
       </div>
     </div>
   )

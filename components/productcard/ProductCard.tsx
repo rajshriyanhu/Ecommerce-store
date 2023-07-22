@@ -34,7 +34,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ name, src, currency, price, s
             <div onClick={() => router.push(`/products/${slug}`)} className="w-full h-[80%] cursor-pointer">
               <img src={src} alt={slug} style={{ height: '100%', width: '100%', objectFit: 'cover' }} />
             </div>
-            <div onClick={() => router.push(`/products/${productId}`)} className="text-md my-1 mx-2">{name}</div>
+            <div onClick={() => router.push(`/products/${slug}`)} className="text-md my-1 mx-2">{name}</div>
           <div className="text-lg my-1 mx-2 font-semibold">{currency === 'INR' ? '₹ ' : '$'} {price}</div>
           <div className="flex gap-2 justify-between mb-2">
             <div className="text-slate-400 text-sm cursor-pointer ml-2">Get it by tomorrow</div>

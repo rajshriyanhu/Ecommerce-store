@@ -25,7 +25,7 @@ const CartButton: React.FC<CartButtonProps> = ({ productId , cartIds }) => {
 
     return (
         <div
-            onClick={addToCart}
+            onClick={ispresentInCart ? () => {} :addToCart }
             className={"relative hover:opacity-80 transition cursor-pointer"}>
             {ispresentInCart ? <BsFillCartCheckFill size={24} /> : <GiShoppingCart size={24} />}
         </div>

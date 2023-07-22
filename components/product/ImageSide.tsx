@@ -1,21 +1,38 @@
 'use client'
 
-import { ImageType } from "@/config/inventory";
 import { urlForImage } from "@/sanity/lib/image";
 import { useState } from "react";
+import HeartButton from "../HeartButton";
+import { Image } from "sanity";
+import { useAuth } from "@clerk/nextjs";
+import { toast } from "react-hot-toast";
 
-const ImageSide: React.FC<ImageType> = ({ images }) => {
+interface ImageSideProps{
+    images: Image[]
+    productId: string;
+    wishlistIds: string[];
+}
+
+const ImageSide: React.FC<ImageSideProps> = ({ images, productId, wishlistIds }) => {
     const image0 = urlForImage(images[0]).url();
     const [currImage, setCurrImage] = useState<string | undefined>(image0);
-
+    const {userId} = useAuth()
 
     const handleCurrentImage = (src: string) => {
         setCurrImage(src)
     }
 
+    const handleWishlist = () => {
+        if(!userId)toast("You need to login first before creating your wishlist")
+      }
+
+
     return (
         <>
-            <div className="w-full h-[68vh] rounded-xl overflow-hidden">
+            <div className="w-full h-[68vh] rounded-xl overflow-hidden relative">
+            <div onClick={handleWishlist} className="absolute top-2 right-2">
+              <HeartButton productId={productId} wishlistIds={wishlistIds} />
+              </div>
                 <img src={currImage} alt="image" style={{ height: '100%', width: '100%', objectFit: 'cover' }} />
             </div>
             <div className="w-full mt-4 flex">{
