@@ -8,6 +8,11 @@ import axios from 'axios'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { toast } from 'react-hot-toast'
 import Loader from '../Loader'
+import { loadStripe } from '@stripe/stripe-js';
+
+const stripePublicKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "no_key_found";
+
+const stripePromise = loadStripe(stripePublicKey);
 
 interface CartSummaryProps {
   products: SanityProduct[]
@@ -39,17 +44,57 @@ const CartSummary: React.FC<CartSummaryProps> = ({ products }) => {
   }, [searchparams, removeAll])
 
   const handleCheckout = async () => {
-    setLoading(true)
-    const response = await axios.get('/api/checkout')
-    console.log(response)
-    setLoading(false)
-    window.location = response.data.url;
-  }
+    setLoading(true);
+  
+    // Initialize Stripe
+    const stripe = await stripePromise;
+  
+    try {
+      // Create checkout session with the total price only
+      const response = await axios.post('/api/checkout', {
+        totalPrice: totalPrice // Pass the total price
+      });
+  
+      const session = response.data;
+      console.log(session);
+  
+      // Redirect to Stripe Checkout
+      const result = await stripe?.redirectToCheckout({
+        sessionId: session.id,
+      });
+  
+      if (result?.error) {
+        // Handle errors here
+        toast.error(result.error.message || 'Erroe faced');
+      }
+    } catch (error) {
+      // Handle any errors that occur during the fetch
+      console.error('Error during checkout:', error);
+      toast.error('Error during checkout.');
+    }
+  
+    setLoading(false);
+  };
+  
+  
+
+  const handleCartUpdate = () => {
+    setTotalPrice(getTotalPrice(products));
+  };
 
   // Update the total price whenever the cartState changes
   useEffect(() => {
+    // Set the initial total price
     setTotalPrice(getTotalPrice(products));
-  }, []);
+
+    // Subscribe to cart state changes
+    const unsubscribe = subscribeToCartChanges(handleCartUpdate);
+
+    // Clean up the subscription when the component unmounts
+    return () => {
+      unsubscribe();
+    };
+  }, [products]);
 
   // Subscribe to cartState changes to keep the total price up to date
   useEffect(() => {
